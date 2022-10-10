@@ -2,13 +2,13 @@
   "source": "Unity",
   "applications": [
     {
-      "app_key": "application.generated.unity.myproject1.exe",
+      "app_key": "application.generated.unity.vr_vorms.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "D:\\Unity\\vr test\\My project (1)\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\Users\\User\\Documents\\UnityProjects\\VR_Vorms\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
-          "name": "My project (1) [Testing]"
+          "name": "VR_Vorms [Testing]"
         }
       }
     }
