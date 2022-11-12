@@ -15,9 +15,11 @@ public class Projectile : MonoBehaviour
     private float velocity = 10f;
 
     private Rigidbody rb;
+    private SwitchPlayers switchingController;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        switchingController = FindObjectOfType<SwitchPlayers>();
     }
 
     private void Start()
@@ -27,22 +29,28 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
         CreateExplosionKnockback();
+        //switchingController.UpdateTeamsInfo();
+        Destroy(gameObject);
         CreateExplosionEffect();
+        //switchingController.SwitchTeam();
     }
 
     private void CreateExplosionEffect()
     {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
     }
-
     private void CreateExplosionKnockback()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explRadius);
 
         foreach(Collider affectedObj in colliders)
         {
+            if (affectedObj.gameObject.CompareTag("CharacterModel"))
+            {
+                affectedObj.GetComponent<Die>().DoDie();
+                continue;
+            }
             Rigidbody rigg = affectedObj.GetComponent<Rigidbody>();
             if(rigg != null)
             {
