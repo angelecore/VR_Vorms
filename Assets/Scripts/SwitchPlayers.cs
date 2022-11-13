@@ -11,7 +11,8 @@ public class SwitchPlayers : MonoBehaviour
     public SteamVR_Action_Boolean SwitchCharaktersAction;
     public Text VictoryText;
     private int CurrentTeam = 0;
-    private int CurrentChar = 0;
+    private int CurrentCharInd = 0;
+    private CameraRigTeamNumber CurrentChar;
     private int Maxteam1 = 0;
     private int Maxteam2 = 0;
 
@@ -19,7 +20,7 @@ public class SwitchPlayers : MonoBehaviour
     public bool IsTeamSwitchingEnabled = true;
 
     public bool IsCharacterSwitchingEnabled = true;
-    //Need to disable this ^ after teleporting (the same way ProjectileController.cs does it)
+    //Need to set this ^ to false after teleporting (the same way ProjectileController.cs does it)
 
     CameraRigTeamNumber[,] teams;
     void Start()
@@ -52,6 +53,7 @@ public class SwitchPlayers : MonoBehaviour
         Maxteam1 = team1MaxCount;
         Maxteam2 = team2MaxCount;
         teams = temp;
+        CurrentChar = teams[CurrentTeam, CurrentCharInd];
     }
 
     // Update is called once per frame
@@ -60,19 +62,22 @@ public class SwitchPlayers : MonoBehaviour
         if (SwitchCharaktersAction.GetStateDown(SteamVR_Input_Sources.RightHand) && IsCharacterSwitchingEnabled)
         {
             //Disabling current character's rotation script and Camera rig, enabling its Model
-            teams[CurrentTeam, CurrentChar].TryGetComponent<Behaviour>(out Behaviour scriptToDisable);
+            CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToDisable);
             scriptToDisable.enabled = false;
-            teams[CurrentTeam, CurrentChar].transform.GetChild(0).gameObject.SetActive(false);
-            teams[CurrentTeam, CurrentChar].transform.GetChild(1).gameObject.SetActive(true);
+            CurrentChar.transform.GetChild(0).gameObject.SetActive(false);
+            CurrentChar.transform.GetChild(1).gameObject.SetActive(true);
 
-            CurrentChar++;
-            if ((CurrentTeam == 0 && CurrentChar >= Maxteam1) || (CurrentTeam == 1 && CurrentChar >= Maxteam2))
-                CurrentChar = 0;
+            CurrentCharInd++;
+            if ((CurrentTeam == 0 && CurrentCharInd >= Maxteam1) || (CurrentTeam == 1 && CurrentCharInd >= Maxteam2))
+            {
+                CurrentCharInd = 0;
+            }
+            CurrentChar = teams[CurrentTeam, CurrentCharInd];
 
             //Enabling new character's rotation script and Camera rig, disabling its Model
-            teams[CurrentTeam, CurrentChar].transform.GetChild(0).gameObject.SetActive(true);
-            teams[CurrentTeam, CurrentChar].transform.GetChild(1).gameObject.SetActive(false);
-            teams[CurrentTeam, CurrentChar].TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
+            CurrentChar.transform.GetChild(0).gameObject.SetActive(true);
+            CurrentChar.transform.GetChild(1).gameObject.SetActive(false);
+            CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
             scriptToEnable.enabled = true;
         }
     }
@@ -83,16 +88,17 @@ public class SwitchPlayers : MonoBehaviour
         UpdateTeamsInfo();
 
         //Disabling current character's rotation script and Camera rig, enabling its Model
-        teams[CurrentTeam, CurrentChar].TryGetComponent<Behaviour>(out Behaviour scriptToDisable);
+        CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToDisable);
         scriptToDisable.enabled = false;
-        teams[CurrentTeam, CurrentChar].transform.GetChild(0).gameObject.SetActive(false);
-        teams[CurrentTeam, CurrentChar].transform.GetChild(1).gameObject.SetActive(true);
+        CurrentChar.transform.GetChild(0).gameObject.SetActive(false);
+        CurrentChar.transform.GetChild(1).gameObject.SetActive(true);
 
         if (IsGameOver)
         {
             CurrentTeam = 2;
             IsTeamSwitchingEnabled = false;
             IsCharacterSwitchingEnabled = false;
+            StartCoroutine(ReturnToMenu());
         }
         else
         {
@@ -101,12 +107,13 @@ public class SwitchPlayers : MonoBehaviour
             else
                 CurrentTeam = 0;
         }
-        CurrentChar = 0;
+        CurrentCharInd = 0;
+        CurrentChar = teams[CurrentTeam, CurrentCharInd];
 
         //Enabling new character's rotation script and Camera rig, disabling its Model
-        teams[CurrentTeam, CurrentChar].transform.GetChild(0).gameObject.SetActive(true);
-        teams[CurrentTeam, CurrentChar].transform.GetChild(1).gameObject.SetActive(false);
-        teams[CurrentTeam, CurrentChar].TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
+        CurrentChar.transform.GetChild(0).gameObject.SetActive(true);
+        CurrentChar.transform.GetChild(1).gameObject.SetActive(false);
+        CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
         scriptToEnable.enabled = true;
 
         IsCharacterSwitchingEnabled = true;
@@ -158,5 +165,12 @@ public class SwitchPlayers : MonoBehaviour
             VictoryText.color = parsedColor;
             IsGameOver = true;
         }
+    }
+
+    private IEnumerator ReturnToMenu()
+    {
+        yield return new WaitForSeconds(7);
+
+        Scenes.LoadPreviousScene();
     }
 }
