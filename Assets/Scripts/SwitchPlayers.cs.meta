@@ -3,7 +3,10 @@ guid: c13e637e45b1ec54b82f3a77d9d23b7d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - VictoryText: {instanceID: 0}
+  - OrangePlayerPrefab: {instanceID: 0}
+  - BluePlayerPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

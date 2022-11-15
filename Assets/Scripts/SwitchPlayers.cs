@@ -10,6 +10,9 @@ public class SwitchPlayers : MonoBehaviour
     public SteamVR_Action_Boolean SwitchTeamsAction;
     public SteamVR_Action_Boolean SwitchCharaktersAction;
     public Text VictoryText;
+    public GameObject OrangePlayerPrefab;
+    public GameObject BluePlayerPrefab;
+    public int TeamPlayerAmount = 3;
     private int CurrentTeam = 0;
     private int CurrentCharInd = 0;
     private CameraRigTeamNumber CurrentChar;
@@ -25,6 +28,10 @@ public class SwitchPlayers : MonoBehaviour
     CameraRigTeamNumber[,] teams;
     void Start()
     {
+        CurrentChar = FindObjectOfType<CameraRigTeamNumber>();
+
+        SpawnPlayers();
+
         PlayerList = FindObjectsOfType(typeof(CameraRigTeamNumber)) as CameraRigTeamNumber[];
         CameraRigTeamNumber[,] temp = new CameraRigTeamNumber[3, PlayerList.Length];
         int team1MaxCount = 0;
@@ -53,7 +60,7 @@ public class SwitchPlayers : MonoBehaviour
         Maxteam1 = team1MaxCount;
         Maxteam2 = team2MaxCount;
         teams = temp;
-        CurrentChar = teams[CurrentTeam, CurrentCharInd];
+        //CurrentChar = teams[CurrentTeam, CurrentCharInd];
     }
 
     // Update is called once per frame
@@ -172,5 +179,30 @@ public class SwitchPlayers : MonoBehaviour
         yield return new WaitForSeconds(7);
 
         Scenes.LoadPreviousScene();
+    }
+
+    private void SpawnPlayers()
+    {
+        List<GameObject> spawnPoints = new List<GameObject>();
+        spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("Spawnpoint"));
+
+        if(spawnPoints.Count < TeamPlayerAmount * 2 - 1)
+        {
+            throw new System.Exception("Not enough spawnpoints to spawn the desired amount of players");
+        }
+
+        for (int i = 0; i < TeamPlayerAmount; i++)
+        {
+            int spawnPointIndex = Random.Range(0, spawnPoints.Count);
+            Instantiate(BluePlayerPrefab, spawnPoints[spawnPointIndex].transform.position, Quaternion.identity);
+            spawnPoints.RemoveAt(spawnPointIndex);
+        }
+
+        for (int i = 0; i < (TeamPlayerAmount - 1); i++)
+        {
+            int spawnPointIndex = Random.Range(0, spawnPoints.Count);
+            Instantiate(OrangePlayerPrefab, spawnPoints[spawnPointIndex].transform.position, Quaternion.identity);
+            spawnPoints.RemoveAt(spawnPointIndex);
+        }
     }
 }

@@ -7,6 +7,8 @@ TagManager:
   - Interactable
   - CharacterModel
   - SwitchingController
+  - Spawnpoint
+  - PR_pointer
   layers:
   - Default
   - TransparentFX

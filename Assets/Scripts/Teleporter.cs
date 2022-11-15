@@ -6,7 +6,8 @@ using Valve.VR;
 public class Teleporter : MonoBehaviour
 {
 
-    public GameObject m_Pointer;
+    private GameObject m_Pointer;
+    public GameObject m_PointerPrefab;
     public SteamVR_Action_Boolean m_TeleportAction;
 
     private SteamVR_Behaviour_Pose m_Pose = null;
@@ -19,6 +20,18 @@ public class Teleporter : MonoBehaviour
     void Awake()
     {
         m_Pose = GetComponent<SteamVR_Behaviour_Pose>();
+        m_Pointer = Instantiate(m_PointerPrefab);
+    }
+
+    private void OnEnable()
+    {
+        if(m_Pointer != null)
+            m_Pointer.GetComponent<MeshRenderer>().enabled = true;
+    }
+    private void OnDisable()
+    {
+        if (m_Pointer != null)
+            m_Pointer.GetComponent<MeshRenderer>().enabled = false;
     }
 
     // Update is called once per frame
