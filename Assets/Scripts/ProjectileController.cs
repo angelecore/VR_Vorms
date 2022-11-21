@@ -39,7 +39,7 @@ public class ProjectileController : MonoBehaviour
         if (FirePress.GetStateDown(SteamVR_Input_Sources.RightHand) && !HaveShot)
         {
             HaveShot = true;
-
+            
             //disabling character switching after firing
             switchingController.IsCharacterSwitchingEnabled = false;
 

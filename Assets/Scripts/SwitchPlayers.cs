@@ -18,9 +18,9 @@ public class SwitchPlayers : MonoBehaviour
     private CameraRigTeamNumber CurrentChar;
     private int Maxteam1 = 0;
     private int Maxteam2 = 0;
+    public bool CanSwitchTeammates = true;
 
     private bool IsGameOver = false;
-    public bool IsTeamSwitchingEnabled = true;
 
     public bool IsCharacterSwitchingEnabled = true;
     //Need to set this ^ to false after teleporting (the same way ProjectileController.cs does it)
@@ -73,7 +73,6 @@ public class SwitchPlayers : MonoBehaviour
             scriptToDisable.enabled = false;
             CurrentChar.transform.GetChild(0).gameObject.SetActive(false);
             CurrentChar.transform.GetChild(1).gameObject.SetActive(true);
-            CurrentChar.transform.GetChild(2).gameObject.SetActive(false);
 
             CurrentCharInd++;
             if ((CurrentTeam == 0 && CurrentCharInd >= Maxteam1) || (CurrentTeam == 1 && CurrentCharInd >= Maxteam2))
@@ -85,7 +84,6 @@ public class SwitchPlayers : MonoBehaviour
             //Enabling new character's rotation script and Camera rig, disabling its Model
             CurrentChar.transform.GetChild(0).gameObject.SetActive(true);
             CurrentChar.transform.GetChild(1).gameObject.SetActive(false);
-            CurrentChar.transform.GetChild(2).gameObject.SetActive(true);
             CurrentChar.transform.GetChild(2).localScale = Vector3.one *20;
             CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
             scriptToEnable.enabled = true;
@@ -102,12 +100,10 @@ public class SwitchPlayers : MonoBehaviour
         scriptToDisable.enabled = false;
         CurrentChar.transform.GetChild(0).gameObject.SetActive(false);
         CurrentChar.transform.GetChild(1).gameObject.SetActive(true);
-        CurrentChar.transform.GetChild(2).gameObject.SetActive(false);
 
         if (IsGameOver)
         {
             CurrentTeam = 2;
-            IsTeamSwitchingEnabled = false;
             IsCharacterSwitchingEnabled = false;
             StartCoroutine(ReturnToMenu());
         }
@@ -124,7 +120,6 @@ public class SwitchPlayers : MonoBehaviour
         //Enabling new character's rotation script and Camera rig, disabling its Model
         CurrentChar.transform.GetChild(0).gameObject.SetActive(true);
         CurrentChar.transform.GetChild(1).gameObject.SetActive(false);
-        CurrentChar.transform.GetChild(2).gameObject.SetActive(true);
         CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
         scriptToEnable.enabled = true;
 
@@ -209,5 +204,10 @@ public class SwitchPlayers : MonoBehaviour
             Instantiate(OrangePlayerPrefab, spawnPoints[spawnPointIndex].transform.position, Quaternion.identity);
             spawnPoints.RemoveAt(spawnPointIndex);
         }
+    }
+    
+    public CameraRigTeamNumber GetCurrentPlayer()
+    {
+        return CurrentChar;
     }
 }

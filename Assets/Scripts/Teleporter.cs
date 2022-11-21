@@ -22,10 +22,16 @@ public class Teleporter : MonoBehaviour
 
     public LayerMask Ground;
 
+    private SwitchPlayers SwitchController;
+
+    private GameObject m_Sphere; // range indicator
+
     void Awake()
     {
         m_Pose = GetComponent<SteamVR_Behaviour_Pose>();
         m_Pointer = Instantiate(m_PointerPrefab);
+        SwitchController = FindObjectOfType<SwitchPlayers>();
+        m_Sphere = SteamVR_Render.Top().origin.parent.GetChild(2).gameObject;
     }
 
     private void OnEnable()
@@ -48,9 +54,16 @@ public class Teleporter : MonoBehaviour
         m_Pointer.SetActive(m_hasPosition);
         
         // Teleport
+        if (m_TeleportAction.GetStateDown(m_Pose.inputSource))
+        {
+            if(m_movementleft > 1f)
+                m_Sphere.SetActive(true);
+        }
         if (m_TeleportAction.GetStateUp(m_Pose.inputSource))
         {
+            m_Sphere.SetActive(false);
             TryTeleport();
+            
         }
     }
 
@@ -63,6 +76,9 @@ public class Teleporter : MonoBehaviour
         }
         m_movementleft = m_movementleft - distance;
         Transform Rig = SteamVR_Render.Top().origin.parent;
+        SwitchController.IsCharacterSwitchingEnabled = false;
+        //this.TryGetComponent<Behaviour>(out Behaviour scriptToDisable);
+        //scriptToDisable.enabled = false;
         Vector3 HeadPosition = SteamVR_Render.Top().head.position;
 
         Vector3 GroundPostion = new Vector3(HeadPosition.x, Rig.position.y, HeadPosition.z);
@@ -70,7 +86,7 @@ public class Teleporter : MonoBehaviour
 
         Transform m_Sphere = Rig.GetChild(2);
         m_Sphere.localScale = Vector3.one * m_movementleft*2;
-        if(m_movementleft < 1f)
+        if(m_movementleft < 1.5f)
             m_Sphere.gameObject.SetActive(false);
 
 
