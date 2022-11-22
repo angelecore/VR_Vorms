@@ -120,6 +120,7 @@ public class SwitchPlayers : MonoBehaviour
         //Enabling new character's rotation script and Camera rig, disabling its Model
         CurrentChar.transform.GetChild(0).gameObject.SetActive(true);
         CurrentChar.transform.GetChild(1).gameObject.SetActive(false);
+        CurrentChar.transform.GetChild(2).localScale = Vector3.one * 20;
         CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
         scriptToEnable.enabled = true;
 
