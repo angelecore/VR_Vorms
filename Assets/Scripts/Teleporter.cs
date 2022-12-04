@@ -1,10 +1,12 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
 public class Teleporter : MonoBehaviour
 {
+    [SerializeField]
+    public AudioClip clip;
 
     private GameObject m_Pointer;
     public GameObject m_PointerPrefab;
@@ -52,8 +54,9 @@ public class Teleporter : MonoBehaviour
         // Pointer
         m_hasPosition = UpdatePointer();
         m_Pointer.SetActive(m_hasPosition);
-        
+
         // Teleport
+        SoundManager.Instance.PLaySound(clip);
         if (m_TeleportAction.GetStateDown(m_Pose.inputSource))
         {
             if(m_movementleft > 1f)

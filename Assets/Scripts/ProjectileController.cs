@@ -18,6 +18,9 @@ public class ProjectileController : MonoBehaviour
     [SerializeField]
     private UnityEvent onFire;
 
+    [SerializeField]
+    private AudioClip clip;
+
     private bool HaveShot = false;
 
     public SteamVR_Action_Boolean FirePress = null;
@@ -42,7 +45,7 @@ public class ProjectileController : MonoBehaviour
             
             //disabling character switching after firing
             switchingController.IsCharacterSwitchingEnabled = false;
-
+            SoundManager.Instance.PLaySound(clip);
             Instantiate(projectilePrefab, barrel.position, barrel.rotation);
             Instantiate(muzzlePrefab, barrel.position, barrel.rotation);
 
