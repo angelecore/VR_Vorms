@@ -56,7 +56,7 @@ public class Teleporter : MonoBehaviour
         m_Pointer.SetActive(m_hasPosition);
 
         // Teleport
-        SoundManager.Instance.PLaySound(clip);
+        // SoundManager.Instance.PLaySound(clip); the hell
         if (m_TeleportAction.GetStateDown(m_Pose.inputSource))
         {
             if(m_movementleft > 1f)

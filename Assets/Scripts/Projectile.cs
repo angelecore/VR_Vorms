@@ -46,6 +46,7 @@ public class Projectile : MonoBehaviour
 
         foreach(Collider affectedObj in colliders)
         {
+            
             if (affectedObj.gameObject.CompareTag("CharacterModel"))
             {
                 affectedObj.GetComponent<Die>().DoDie();
