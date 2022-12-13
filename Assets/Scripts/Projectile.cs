@@ -14,6 +14,9 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     private float velocity = 10f;
 
+    [SerializeField]
+    private AudioClip clip;
+
     private Rigidbody rb;
     private SwitchPlayers switchingController;
     private void Awake()
@@ -33,6 +36,7 @@ public class Projectile : MonoBehaviour
         //switchingController.UpdateTeamsInfo();
         Destroy(gameObject);
         CreateExplosionEffect();
+        SoundManager.Instance.PLaySound(clip);
         //switchingController.SwitchTeam();
     }
 

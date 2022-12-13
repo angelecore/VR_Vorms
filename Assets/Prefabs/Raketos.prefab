@@ -130,3 +130,4 @@ MonoBehaviour:
   explForce: 500
   explRadius: 8
   velocity: 20
+  clip: {fileID: 8300000, guid: 8aa8078d07be27446b00d913f62e2a31, type: 3}

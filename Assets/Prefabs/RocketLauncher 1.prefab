@@ -180,7 +180,7 @@ MonoBehaviour:
   onFire:
     m_PersistentCalls:
       m_Calls: []
-  clip: {fileID: 0}
+  clip: {fileID: 8300000, guid: c278656d099d0ab47b958015655a61d3, type: 3}
   FirePress:
     actionPath: /actions/default/in/GrabPinch
     needsReinit: 0
