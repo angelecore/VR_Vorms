@@ -73,6 +73,7 @@ public class SwitchPlayers : MonoBehaviour
             scriptToDisable.enabled = false;
             CurrentChar.transform.GetChild(0).gameObject.SetActive(false);
             CurrentChar.transform.GetChild(1).gameObject.SetActive(true);
+            CurrentChar.transform.GetChild(3).gameObject.SetActive(true);
 
             CurrentCharInd++;
             if ((CurrentTeam == 0 && CurrentCharInd >= Maxteam1) || (CurrentTeam == 1 && CurrentCharInd >= Maxteam2))
@@ -85,6 +86,7 @@ public class SwitchPlayers : MonoBehaviour
             CurrentChar.transform.GetChild(0).gameObject.SetActive(true);
             CurrentChar.transform.GetChild(1).gameObject.SetActive(false);
             CurrentChar.transform.GetChild(2).localScale = Vector3.one *20;
+            CurrentChar.transform.GetChild(3).gameObject.SetActive(false);
             CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
             scriptToEnable.enabled = true;
         }
@@ -110,9 +112,43 @@ public class SwitchPlayers : MonoBehaviour
         else
         {
             if (CurrentTeam == 0)
+            {
                 CurrentTeam = 1;
+                foreach (CameraRigTeamNumber item in PlayerList)
+                {
+                    Debug.Log("yes");
+                    if (!item.alive)
+                        continue;
+                    if(item.team == 1)
+                    {
+                        Debug.Log("yes yes");
+                        item.transform.GetChild(3).gameObject.SetActive(false);
+                    }
+                    if (item.team == 2)
+                    {
+                        Debug.Log("yes yes");
+                        item.transform.GetChild(3).gameObject.SetActive(true);
+                    }
+                }
+            }
             else
+            {
                 CurrentTeam = 0;
+                foreach (CameraRigTeamNumber item in PlayerList)
+                {
+                    Debug.Log("yes2");
+                    if (!item.alive)
+                        continue;
+                    if (item.team == 2)
+                    {
+                        item.transform.GetChild(3).gameObject.SetActive(false);
+                    }
+                    if (item.team == 1)
+                    {
+                        item.transform.GetChild(3).gameObject.SetActive(true);
+                    }
+                }
+            }
         }
         CurrentCharInd = 0;
         CurrentChar = teams[CurrentTeam, CurrentCharInd];
@@ -121,6 +157,7 @@ public class SwitchPlayers : MonoBehaviour
         CurrentChar.transform.GetChild(0).gameObject.SetActive(true);
         CurrentChar.transform.GetChild(1).gameObject.SetActive(false);
         CurrentChar.transform.GetChild(2).localScale = Vector3.one * 20;
+        CurrentChar.transform.GetChild(3).gameObject.SetActive(false);
         CurrentChar.TryGetComponent<Behaviour>(out Behaviour scriptToEnable);
         scriptToEnable.enabled = true;
 
